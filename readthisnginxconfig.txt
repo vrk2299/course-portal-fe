@@ -1,3 +1,8 @@
+
+deploy rest of the files into 
+cd /var/www/course-portal
+and then
+
 Configure Nginx to serve our website
 Create a dedicated Nginx site configuration:
 sudo nano /etc/nginx/sites-available/course-portal
