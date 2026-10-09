@@ -1,0 +1,61 @@
+Configure Nginx to serve our website
+Create a dedicated Nginx site configuration:
+sudo nano /etc/nginx/sites-available/course-portal
+
+
+Paste:
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name _;
+
+    root /var/www/course-portal;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /css/ {
+        try_files $uri =404;
+    }
+
+    location /js/ {
+        try_files $uri =404;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}
+
+
+Save and exit. Enable the site:
+sudo ln -s /etc/nginx/sites-available/course-portal \
+  /etc/nginx/sites-enabled/course-portal
+
+sudo rm -f /etc/nginx/sites-enabled/default
+
+sudo nginx -t
+sudo systemctl reload nginx
+
+
+If nginx -t reports an error, stop and fix it before reloading.
+Step 4 — Test the deployment
+Run these commands:
+# Check the homepage
+curl -I http://localhost/
+
+# Check the stylesheet
+curl -I http://localhost/css/style.css
+
+# Check the JavaScript
+curl -I http://localhost/js/app.js
+
+# Check Nginx service
+sudo systemctl is-active nginx
+
+
+You want HTTP 200 OK for all three files and active for Nginx.
+Then open http://YOUR_EC2_PUBLIC_IP in your browser.
